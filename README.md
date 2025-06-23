@@ -1,8 +1,8 @@
 # NHANES Diabetes Risk Modeling
 
-This project investigates the relationship between Hemoglobin A1c (HbA1c) — a clinical marker for diabetes — and various demographic, biometric, and socioeconomic factors using NHANES data. The aim is to identify non-linear effects, interaction terms, and disparities in diabetes risk across subpopulations.
+- How do biometric, demographic, and socioeconomic factors jointly influence Hemoglobin A1c levels—a key indicator of diabetes risk—in the U.S. population? 
+- Using data from NHANES, can we model these relationships non-linearly and explore interaction effects (e.g., between age, sex, BMI, and race/ethnicity) to identify subgroups with elevated glycemic risk? Furthermore, how do model structures and variable interactions shape our understanding of disparities in predicted A1c across demographic strata?
 
-The analysis builds upon the modeling strategies demonstrated in the STATS 485 NHANES assignment, incorporating linear models, generalized additive models (GAMs), and dimension reduction techniques such as Sliced Inverse Regression (SIR).
 
 ## Objective
 
