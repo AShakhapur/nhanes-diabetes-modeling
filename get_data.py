@@ -2,59 +2,65 @@ import os
 import requests
 import pandas as pd
 
-# URLs for NHANES 2017–2018 data components
+# NHANES 2017–2018 public CSV URLs
 urls = {
-    "DEMO_J.XPT": "https://wwwn.cdc.gov/Nchs/Data/Nhanes/Public/2017/DataFiles/DEMO_J.xpt",   # Demographics
-    "BMX_J.XPT":  "https://wwwn.cdc.gov/Nchs/Data/Nhanes/Public/2017/DataFiles/BMX_J.xpt",    # Body Measures
-    "GHB_J.XPT":  "https://wwwn.cdc.gov/Nchs/Data/Nhanes/Public/2017/DataFiles/GHB_J.xpt",    # HbA1C 
-    "DIQ_J.XPT":  "https://wwwn.cdc.gov/Nchs/Data/Nhanes/Public/2017/DataFiles/DIQ_J.xpt",    # Diabetes questionnaire
+    "DEMO_J.csv": "https://wwwn.cdc.gov/Nchs/Nhanes/2017-2018/DEMO_J.csv",
+    "BMX_J.csv":  "https://wwwn.cdc.gov/Nchs/Nhanes/2017-2018/BMX_J.csv",
+    "GHB_J.csv":  "https://wwwn.cdc.gov/Nchs/Nhanes/2017-2018/GHB_J.csv",
+    "DIQ_J.csv":  "https://wwwn.cdc.gov/Nchs/Nhanes/2017-2018/DIQ_J.csv"
 }
 
-
-# Directory to save downloaded and processed files
+# Directory to save raw data
 data_dir = "./datasets"
 os.makedirs(data_dir, exist_ok=True)
 
-# Step 1: Download and save .xpt files
+# Step 1: Download .csv files
 for filename, url in urls.items():
-    xpt_path = os.path.join(data_dir, filename)
-    if not os.path.exists(xpt_path):
+    path = os.path.join(data_dir, filename)
+    if not os.path.exists(path):
         response = requests.get(url)
-        with open(xpt_path, "wb") as f:
+        with open(path, "wb") as f:
             f.write(response.content)
         print(f"Downloaded: {filename}")
     else:
         print(f"Already exists: {filename}")
 
-# Step 2: Convert .xpt files to .csv and load into DataFrames
+# Step 2: Load into DataFrames
 dataframes = []
-for file in urls.keys():
-    xpt_path = os.path.join(data_dir, file)
-    csv_path = xpt_path.replace(".XPT", ".csv")
-    df = pd.read_sas(xpt_path, format="xport")
-    df["SEQN"] = df["SEQN"].astype("Int64")  # enforce integer join key
-    df.to_csv(csv_path, index=False)
-    print(f"Converted: {file} -> {csv_path}")
+for filename in urls:
+    path = os.path.join(data_dir, filename)
+    df = pd.read_csv(path)
+    df["SEQN"] = df["SEQN"].astype("Int64")  # Ensure merge key is consistent
     dataframes.append(df)
+    print(f"Loaded: {filename} — Shape: {df.shape}")
 
-for i, df in enumerate(dataframes):
-    print(f"\nDataFrame {i} shape: {df.shape}")
-    print(df.head(2))
-    print(df.isna().all().sum(), "columns with all NaN")
-    print("Non-null counts per column:")
-    print(df.notna().sum())
+    # Fix for corrupted small-float values in integer-like columns
+    int_like_columns = ["DMDHHSZE", "DMDHHSZA", "DMDHHSZB", "DMDHHSIZ", "DMDFMSIZ"]
+
+    for col in int_like_columns:
+        if col in df.columns:
+            df[col] = pd.to_numeric(df[col], errors="coerce")
+            df[col] = df[col].round().astype("Int64")
 
 
 
-# Step 3: Merge all dataframes on SEQN
-    # Assume the first df is DEMO_J
+# Step 3: Merge all on SEQN
+categorical_vars = [
+    "RIAGENDR", "RIDRETH1", "RIDRETH3", "DMQMILIZ", "DMDBORN4", "DMDCITZN",
+    "DMDEDUC2", "DMDMARTL", "DMDHHSIZ", "DMDFMSIZ", "DMDHHSZA", "DMDHHSZB",
+    "DMDHHSZE", "INDHHIN2", "INDFMIN2"
+]
+
 merged = dataframes[0]
 for df in dataframes[1:]:
     merged = pd.merge(merged, df, on="SEQN", how="left")
 
+    for col in int_like_columns:
+        if col in df.columns:
+            df[col] = pd.to_numeric(df[col], errors="coerce")
+            df[col] = df[col].round().astype("Int64")
 
-# Step 4: Save merged file
+# Step 4: Save merged result
 merged_path = os.path.join(data_dir, "nhanes_hba1c_merged.csv")
 merged.to_csv(merged_path, index=False)
 print(f"Merged dataset saved to: {merged_path}")
-

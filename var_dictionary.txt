@@ -1,0 +1,70 @@
+# Listing Variable definitions for later reference
+
+nhanes_variable_dict = {
+    "SEQN": "Respondent sequence number (unique identifier)",
+    "RIAGENDR": "Gender of respondent (1=Male, 2=Female)",
+    "RIDAGEYR": "Age in years at screening",
+    "RIDRETH1": "Race/ethnicity (5-level: Mexican Am., Other Hispanic, Non-Hispanic White, Non-Hispanic Black, Other)",
+    "RIDRETH3": "Race/ethnicity (6-level: includes multi-racial)",
+    "RIDEXMON": "Month of exam (1=November–April, 2=May–October)",
+    "DMQMILIZ": "Served active duty in U.S. Armed Forces (1=Yes, 2=No)",
+    "DMDBORN4": "Country of birth (1=USA, 2=Other, 3=Don't know/refused)",
+    "DMDCITZN": "U.S. citizenship status (1=Citizen by birth, 2=Citizen by naturalization, 3=Non-citizen)",
+    "DMDEDUC2": "Education level for adults 20+ (1=<9th grade to 5=College graduate)",
+    "DMDMARTL": "Marital status (1=Married, 2=Widowed, ..., 6=Never married)",
+    "DMDHHSIZ": "Total number of people in household",
+    "DMDFMSIZ": "Total number of family members in household",
+    "DMDHHSZA": "Number of children aged 0–5 in household",
+    "DMDHHSZB": "Number of children aged 6–17 in household",
+    "DMDHHSZE": "Number of adults aged 60+ in household",
+    "INDHHIN2": "Household income (categorical levels)",
+    "INDFMIN2": "Family income (categorical levels)",
+    "INDFMPIR": "Family income to poverty ratio (continuous)",
+    "BMXWT": "Weight in kilograms",
+    "BMXHT": "Standing height in centimeters",
+    "BMXBMI": "Body Mass Index (kg/m²)",
+    "BMXLEG": "Upper leg length in centimeters",
+    "BMXARML": "Upper arm length in centimeters",
+    "BMXARMC": "Arm circumference in centimeters",
+    "BMXWAIST": "Waist circumference in centimeters",
+    "BMXHIP": "Hip circumference in centimeters",
+    "LBXGH": "Glycohemoglobin (HbA1c) (% of total hemoglobin)"
+}
+
+# Categorical variables (require encoding)
+categorical_vars = [
+    "RIAGENDR",     # Gender
+    "RIDRETH1",     # Race/ethnicity (5-level)
+    "RIDRETH3",     # Race/ethnicity (6-level)
+    "DMQMILIZ",     # Military service
+    "DMDBORN4",     # Country of birth
+    "DMDCITZN",     # Citizenship status
+    "DMDEDUC2",     # Education level
+    "DMDMARTL"     # Marital status
+]
+
+# Numeric variables (can be used directly)
+numeric_vars = [
+    "RIDAGEYR",     # Age
+    "INDFMPIR",     # Income to poverty ratio
+    "BMXWT",        # Weight
+    "BMXHT",        # Height
+    "BMXBMI",       # BMI
+    "BMXLEG",       # Leg length
+    "BMXARML",      # Arm length
+    "BMXARMC",      # Arm circumference
+    "BMXWAIST",     # Waist circumference
+    "BMXHIP",       # Hip circumference
+    "LBXGH",         # HbA1c (target)
+    "DMDHHSIZ",     # Household size
+    "DMDFMSIZ",     # Family size
+    "DMDHHSZA",     # Children 0–5
+    "DMDHHSZB",     # Children 6–17
+    "DMDHHSZE",     # Adults 60+
+    "INDHHIN2",     # Household income
+    "INDFMIN2"     # Family income
+
+]
+
+# Not used for modeling (identifier)
+id_var = ["SEQN"]
