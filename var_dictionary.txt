@@ -40,7 +40,14 @@ categorical_vars = [
     "DMDBORN4",     # Country of birth
     "DMDCITZN",     # Citizenship status
     "DMDEDUC2",     # Education level
-    "DMDMARTL"     # Marital status
+    "DMDMARTL",     # Marital status
+    "DMDHHSIZ",     # Household size
+    "DMDFMSIZ",     # Family size
+    "DMDHHSZA",     # Children 0–5
+    "DMDHHSZB",     # Children 6–17
+    "DMDHHSZE",     # Adults 60+
+    "INDHHIN2",     # Household income
+    "INDFMIN2"     # Family income
 ]
 
 # Numeric variables (can be used directly)
@@ -56,14 +63,6 @@ numeric_vars = [
     "BMXWAIST",     # Waist circumference
     "BMXHIP",       # Hip circumference
     "LBXGH",         # HbA1c (target)
-    "DMDHHSIZ",     # Household size
-    "DMDFMSIZ",     # Family size
-    "DMDHHSZA",     # Children 0–5
-    "DMDHHSZB",     # Children 6–17
-    "DMDHHSZE",     # Adults 60+
-    "INDHHIN2",     # Household income
-    "INDFMIN2"     # Family income
-
 ]
 
 # Not used for modeling (identifier)
